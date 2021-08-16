@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.metrics import accuracy_score
 
 def show_score(y_true, y_pred):

@@ -1,11 +1,12 @@
 import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
 
 from metrics import y_true_pred_values
-
 def plot_confusion_matrix(y_true, y_pred, title='Confusion matrix', cmap=plt.cm.Blues, labels=None):
+    sns.set_style("whitegrid", {'axes.grid' : False})
     cm = confusion_matrix(y_true, y_pred)
     fig, ax = plt.subplots()
 
