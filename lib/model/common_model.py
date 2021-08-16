@@ -14,10 +14,13 @@ class CommonModel:
         print('Params:\n', [(name, param.shape) for name, param in self.model.named_parameters()])
         return self
     
-    def predict(self, X): 
-        y_hat = self.model(df_to_tensor(X))
-        y_hat = y_hat.cpu().detach().numpy()
+    def predict(self, X):
+        y_hat = self.predict_proba(X)
         return self.conv_pred_out_fn(y_hat) 
+
+    def predict_proba(self, X): 
+        y_hat = self.model(df_to_tensor(X))
+        return y_hat.cpu().detach().numpy()
 
     def fit(
         self, 

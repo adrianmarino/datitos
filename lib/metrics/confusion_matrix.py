@@ -5,11 +5,20 @@ from sklearn.metrics import confusion_matrix
 import itertools
 
 from metrics import y_true_pred_values
-def plot_confusion_matrix(y_true, y_pred, title='Confusion matrix', cmap=plt.cm.Blues, labels=None):
+def plot_confusion_matrix(
+    y_true, 
+    y_pred, 
+    title='Confusion matrix', 
+    cmap=plt.cm.Blues, 
+    labels=None, 
+    figsize=(6, 6)
+):
     sns.set_style("whitegrid", {'axes.grid' : False})
     cm = confusion_matrix(y_true, y_pred)
     fig, ax = plt.subplots()
 
+    fig.set_size_inches(figsize[0], figsize[1])
+    
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar()
