@@ -14,5 +14,5 @@ class OutputCallback(Callback):
         if self.can_plot(args): self.on_show(args)
          
     @abstractmethod
-    def on_show(self, model, optimizer, verbose, epoch, train_loss, val_loss):
+    def on_show(self, args):
         pass

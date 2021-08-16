@@ -3,7 +3,7 @@ from callbacks import Callback
 
 class TrainValLossComputer(Callback):    
     def on_init(self, args): 
-        self.__loss, self.__model = args['metric'], args['model']
+        self.__loss, self.__model = args['loss'], args['model']
 
     def __data_set_loss(self, df):
         return self.__loss(self.__model(df_to_tensor(df[0])), df_to_tensor(df[1])).item()
