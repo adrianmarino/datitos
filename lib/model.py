@@ -32,11 +32,11 @@ class Model:
         for epoch in range(1, epochs+1):
             for X, y in data_iter:
                 # Forward
-                metric = self.metric(self.model(X), y)
+                diff = self.metric(self.model(X), y)
 
                 # Backward
                 self.optimizer.zero_grad()
-                metric.backward()
+                diff.backward()
                 self.optimizer.step()
 
             callback_set.on_after_train(
