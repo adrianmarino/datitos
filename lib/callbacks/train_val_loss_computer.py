@@ -1,7 +1,7 @@
 from data import df_to_tensor
 from callbacks import Callback
 
-class LossMetrics(Callback):    
+class TrainValLossComputer(Callback):    
     def on_init(self, args): 
         self.__loss, self.__model = args['loss'], args['model']
 

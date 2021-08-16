@@ -6,9 +6,7 @@ class ReduceLROnPlateau(Callback):
 
     def on_init(self, args):
         self.scheduler = lr_scheduler.ReduceLROnPlateau(
-            args['optimizer'],  
-            'min', 
-            patience = self.patience
+            args['optimizer'], patience = self.patience
         )
 
     def on_after_train(self, args):

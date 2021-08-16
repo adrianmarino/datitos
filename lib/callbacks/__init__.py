@@ -4,4 +4,4 @@ from .callback_set import *
 from .plot_losses import *
 from .logger import *
 from .reduce_lr_o_plateau import *
-from .loss_metrics import *
+from .train_val_loss_computer import *

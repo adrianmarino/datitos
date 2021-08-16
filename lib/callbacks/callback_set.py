@@ -10,12 +10,13 @@ class CallbackSet:
         }
         [it.on_init(context) for it in self.callbacks]
 
-    def on_after_train(self, model, optimizer, loss, verbose, epoch, train_set, val_set):
+    def on_after_train(self, model, optimizer, loss, verbose, epoch, epochs, train_set, val_set):
         lr = optimizer.param_groups[0]['lr']
         context = { 
             'model': model,
             'optimizer': optimizer,
-            'epoch': epoch, 
+            'epochs': epochs,
+            'epoch': epoch,
             'loss': loss,
             'verbose': verbose,
             'lr': lr,
