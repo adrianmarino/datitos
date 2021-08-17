@@ -1,8 +1,8 @@
-from torch.nn import Sequential, Linear, ReLU, Dropout
+from torch.nn import Sequential, Linear, LeakyReLU, Dropout
 import numpy as np
 
 def dense(n_inputs, n_output, dropout = 0.2):
-    return np.array([Linear(int(n_inputs), int(n_output)), ReLU(), Dropout(dropout)])
+    return np.array([Linear(int(n_inputs), int(n_output)), LeakyReLU(), Dropout(dropout)])
 
 def dense_stack(n_units, dropout=0.2):
     return np.array([
