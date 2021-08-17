@@ -1,20 +1,19 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot_losses(train_losses, val_losses, epochs, warmup_count = 0):
+def plot_metrics(logs, warmup_count = 0): 
+    metric_names = logs.keys()
+    epochs = logs['epoch'][warmup_count:]
+
     sns.set_style("darkgrid")
-    sns.lineplot(
-        x=epochs[warmup_count:],
-        y=train_losses[warmup_count:],
-        label='Train'
-    )
-    sns.lineplot(
-        x=epochs[warmup_count:],
-        y=val_losses[warmup_count:], 
-        label='Validation'
-    )
+    for name in metric_names:
+        if 'epoch' != name:
+            sns.lineplot(
+                x=epochs,
+                y=logs[name][warmup_count:], 
+                label=name.capitalize()
+            )
     plt.xlabel("Epocs")
-    plt.ylabel("Loss")
-    plt.title("Train vs. Validation")
+    plt.title("Metrics")
     plt.tight_layout()
     plt.show()

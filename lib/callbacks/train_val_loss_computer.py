@@ -1,13 +1,8 @@
 from data import df_to_tensor
 from callbacks import Callback
 
-class TrainValLossComputer(Callback):    
-    def on_init(self, args): 
-        self.__loss, self.__model = args['loss'], args['model']
-
-    def __data_set_loss(self, df):
-        return self.__loss(self.__model(df_to_tensor(df[0])), df_to_tensor(df[1])).item()
-
-    def on_after_train(self, args):
-        args['train_loss'] = self.__data_set_loss(args['train_set'])
-        args['val_loss']   = self.__data_set_loss(args['val_set'])
+class TrainValLossComputer(Callback):
+    def compute_loss(self, ctx, df): return ctx.loss()(ctx.wrapped_model()(df_to_tensor(df[0])), df_to_tensor(df[1])).item()
+    def on_after_train(self, ctx):
+        ctx.set_prop('train_loss', self.compute_loss(ctx, ctx.train_set()))
+        ctx.set_prop('val_loss',   self.compute_loss(ctx, ctx.val_set()))

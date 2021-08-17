@@ -5,5 +5,5 @@ class Logger(OutputCallback):
         super().__init__(each_n_epochs)
         self.metrics = metrics
 
-    def on_show(self, args): 
-        print({name:value for (name, value) in args.items() if name in self.metrics})
+    def on_show(self, ctx):
+        print({name:value for (name, value) in ctx.props() if name in self.metrics})
