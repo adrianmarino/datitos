@@ -35,6 +35,9 @@ class CommonModel:
         data_iter = InputDataIteratorFactory.create(train_set[0], train_set[1], batch_size)
 
         for epoch in range(1, epochs+1):
+            # Activate regulatization layers (Dropout, BatchNorm, etc...)
+            self.model.train()
+
             for X, y in data_iter:
                 # Forward
                 loss = self.loss(self.model(X), y)
@@ -43,6 +46,9 @@ class CommonModel:
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
+
+            # Disable regulatization layers (Dropout, BatchNorm, etc...)
+            self.model.eval()
 
             callback_set.on_after_train(
                 self.model, 
