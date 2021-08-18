@@ -4,6 +4,12 @@ from data import df_to_tensor
 
 class CommonModel:
     def __init__(self, model, loss, optimizer, conv_pred_out_fn = lambda y: y):
+        """
+        Requires a pytorch model, a loss, a optimizer and a funciont used to 
+        convert model output (Optional). Last is used to convert mode output 
+        to another outpt representation like a maxarg when last layer is a 
+        softmax.
+        """
         self.model = model
         self.loss = loss
         self.optimizer = optimizer
@@ -15,10 +21,16 @@ class CommonModel:
         return self
     
     def predict(self, X):
+        """
+        Return model prediction.
+        """
         y_hat = self.predict_proba(X)
         return self.conv_pred_out_fn(y_hat) 
 
     def predict_proba(self, X):
+        """
+        Return a probabiliry distribution for each input example.
+        """
         self.__disable_regulatization_layers()        
         y_hat = self.model(df_to_tensor(X))
         self.__enable_regulatization_layers()
@@ -45,6 +57,10 @@ class CommonModel:
         verbose = 1, 
         callback_set = CallbackSet()
     ):
+        """
+        Perform train for the wrapped model. It peform coomon train steps like backpropagation, 
+        weights update, and perform all specified callbacks after each batch train.
+        """
         callback_set.on_init(self, verbose)
         data_iter = InputDataIteratorFactory.create(train_set[0], train_set[1], batch_size)
 
@@ -58,6 +74,8 @@ class CommonModel:
                 # Backward
                 self.optimizer.zero_grad()
                 loss.backward()
+
+                # Update model weights
                 self.optimizer.step()
 
             self.__disable_regulatization_layers()
