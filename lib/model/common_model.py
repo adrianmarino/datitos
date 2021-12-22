@@ -40,13 +40,13 @@ class CommonModel:
         """
         Activate regulatization layers (Dropout, BatchNorm, etc...)
         """
-        self.model.train()
+        self.train()
 
     def __disable_regulatization_layers(self):
         """
         Disable regulatization layers (Dropout, BatchNorm, etc...)
         """
-        self.model.eval()
+        self.eval()
         
     def fit(
         self, 
@@ -81,3 +81,15 @@ class CommonModel:
             self.__disable_regulatization_layers()
 
             callback_set.on_after_train(self, verbose, epoch, epochs, train_set, val_set)
+            
+    
+    def train(self): return self.model.train()
+
+    def parameters(self): return self.model.parameters()
+
+    def eval(self): return self.model.eval()
+
+    def state_dict(self): return self.model.state_dict()
+
+    def __call__(self, data): 
+        return self.model(data)
