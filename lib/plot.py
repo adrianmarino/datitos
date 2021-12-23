@@ -126,3 +126,10 @@ def plot_hist(
     
     ax_hist.set_ylabel(ylabel)
     ax_hist.set_xlabel(xlabel)
+
+def plot_df_clasess_count(df, class_col):
+    groups = df[[class_col]] \
+      .groupby(class_col) \
+      .size() \
+      .reset_index(name='count')
+    sns.barplot(data=groups, x=class_col, y='count')
