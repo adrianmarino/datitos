@@ -27,7 +27,7 @@ $ python bin/train.py --device gpu \
 
 To run 10 workers repeat previous command into 10 distinct shell sessions (bash/szh).
 
-On the other hand, you can run workers that use CPU or GPU. Normally a good configuration could be 2 CPU + 8 GPU workers. 
+On the other hand, you can run workers that use CPU or GPU. Normally a good configuration could be N GPU workers and maybe 1 CPU worker, because CPU workers are high CPU consuming processes. 
 This could be limited by the type of CPU, GPU and GPU and RAM memory. CPU workers parallelze k fold cross validation to decrese response time. GPU workers cant parallelize cv.
 
 **CPU**
