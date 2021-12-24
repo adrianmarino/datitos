@@ -32,7 +32,8 @@ from fifa.model import FifaModel1, \
                        train_model_1
 
 from utils import set_device_name, \
-                  get_device_name
+                  get_device_name, \
+                  get_device
 
 dataset = FifaDataset(
     train_path = './tp2/dataset/fifa2021_training.csv',
@@ -41,17 +42,17 @@ dataset = FifaDataset(
 
 X, y = dataset.train_features_target()
 
-def objetive(trial):
-    k_fold = 5
+def cv_strategy(k_fold):
+    return ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
 
-    strategy = ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
-
+def objetive(trial, k_fold):
     cv = KFoldCV(
         model_train_fn = train_model_1, 
         k_fold         = k_fold,
         callbacks      = [ValAccPruneCallback(trial)], # ReduceLROnPlateau(patience=50)],
-        strategy       = strategy
+        strategy       = cv_strategy(k_fold)
     )
+
     return cv.train(
         X,
         y,
@@ -68,22 +69,50 @@ def objetive(trial):
     )
 
 @click.command()
-@click.option('--device', default='cpu', help='gpu or cpu')
+@click.option(
+    '--device', 
+    default='cpu', 
+    help='Device used to train and optimize model. Values: gpu, cpu.'
+)
 @click.option('--study',  default='my-studio-10', help='The study name.')
-def main(device, study):
+@click.option('--trials',  default=200, help='Max trials count.')
+@click.option(
+    '--timeout',
+    default=5000,
+    help='maximum time spent optimizing hyper parameters in seconds.'
+)
+@click.option(
+    '--db-url',  
+    default='mysql://root:lv3jg6@localhost/example', 
+    help='Mariadb/MySQL connection url.'
+)
+@click.option(
+    '--cuda-process-memory-fraction', 
+    default=0.5, 
+    help='Setup max memory user per CUDA procees. Percentage expressed between 0 and 1'
+)
+@click.option('--folds',  default=5, help='Number of train dataset splits to apply cross validation.')
+def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, folds):
     set_device_name(device)
 
+    torch.cuda.set_per_process_memory_fraction(
+        cuda_process_memory_fraction, 
+        get_device()
+    )
+    torch.cuda.empty_cache()
+
+    print(db_url)
     study_optimization = optuna.create_study(
-        storage="mysql://root:1234@localhost/example", 
-        study_name=study,
-        load_if_exists=True,
-        direction="maximize"
+        storage        = db_url, 
+        study_name     = study,
+        load_if_exists = True,
+        direction      = "maximize"
     )
 
     study_optimization.optimize(
-        objetive,
-        n_trials = 200,
-        timeout  = 5000
+        lambda trial: objetive(trial, folds),
+        n_trials = trials,
+        timeout  = timeout
     )
 
     optimizer_sumary(study_optimization)
@@ -91,6 +120,4 @@ def main(device, study):
 
 if __name__ == '__main__':
     initialize_logger()
-    torch.cuda.set_per_process_memory_fraction(0.5, 0)
-    torch.cuda.empty_cache()
     main()

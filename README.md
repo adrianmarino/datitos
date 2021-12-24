@@ -27,3 +27,26 @@ To monitor workers you can use any of next tools:
 * [btop](https://github.com/aristocratos/btop)
 * [htop](https://github.com/htop-dev/htop)
 * [tmux](https://github.com/tmux/tmux)
+
+See script help:
+
+```bash
+$ python bin/train.py --help
+
+Usage: train.py [OPTIONS]
+
+Options:
+  --device TEXT                   Device used to train and optimize model.
+                                  Values: gpu, cpu.
+  --study TEXT                    The study name.
+  --trials INTEGER                Max trials count.
+  --timeout INTEGER               maximum time spent optimizing hyper
+                                  parameters in seconds.
+  --db-url TEXT                   Mariadb/MySQL connection url.
+  --cuda-process-memory-fraction FLOAT
+                                  Setup max memory user per CUDA procees.
+                                  Percentage expressed between 0 and 1
+  --folds INTEGER                 Number of train dataset splits to apply
+                                  cross validation.
+  --help                          Show this message and exit.
+```
