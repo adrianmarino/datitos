@@ -16,7 +16,7 @@ You can run a training into N workers. Each worker can be seen as a trial execut
 $ conda activate datitos 
 $ python bin/train.py --device gpu \
                       --study study3 \
-                      --cuda-process-memory-fraction 0.2 \
+                      --cuda-process-memory-fraction 0.1 \
                       --folds 10 \
                       --trials 300 \
                       --db-url mysql://root:1234@localhost/example \
