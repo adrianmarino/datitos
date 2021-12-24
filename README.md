@@ -19,7 +19,7 @@ $ conda activate datitos
 $ python bin/train.py --device gpu \
                       --study study3 \
                       --cuda-process-memory-fraction 0.1 \
-                      --folds 10 \
+                      --folds 5 \
                       --trials 300 \
                       --db-url mysql://root:1234@localhost/example \
                       --timeout 5000
@@ -36,12 +36,11 @@ This could be limited by the type of CPU, GPU and GPU and RAM memory. CPU worker
 $ conda activate datitos 
 $ python bin/train.py --device cpu \
                       --study study3 \
-                      --folds 10 \
+                      --folds 5 \
                       --trials 300 \
                       --db-url mysql://root:1234@localhost/example \
                       --timeout 5000
 ```
-
 To monitor workers you can use any of next tools:
 
 * [btop](https://github.com/aristocratos/btop)
