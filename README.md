@@ -14,7 +14,7 @@ You can run a training into N workers. Each worker can be seen as a trial execut
 
 ```bash
 $ conda activate datitos 
-$ python bin/train.py --device gpu --studt study1
+$ python bin/train.py --device gpu --study study1
 ```
 
 To run 10 workers repeat previous command into 10 distinct shell sessions (bash/szh).
