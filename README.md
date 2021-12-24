@@ -18,7 +18,7 @@ $ python bin/train.py --device gpu \
                       --study study3 \
                       --cuda-process-memory-fraction 0.2 \
                       --folds 10 \
-                      --trails 300 \
+                      --trials 300 \
                       --db-url mysql://root:1234@localhost/example \
                       --timeout 5000
 ```
