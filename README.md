@@ -17,7 +17,7 @@ $ conda activate datitos
 $ python bin/train.py --device gpu --studt study1
 ```
 
-To run 10 worker repeat previous command into 10 distinct shell sessions (bash/szh).
+To run 10 workers repeat previous command into 10 distinct shell sessions (bash/szh).
 
 On the other hand, you can run workers that use CPU or GPU. Normally a good configuration could be 2 cpu + 8 gpu workers. 
 This could be limited by the type of cpu, gpu and gpiu and ram memory. CPU workers parallelze k fold cross validation to decrese response time. GPU workers cant parallelize cv.
