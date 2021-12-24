@@ -17,7 +17,7 @@ $ conda activate datitos
 $ python bin/train.py --device gpu \
                       --study study3 \
                       --cuda-process-memory-fraction 0.2 \
-                      --fold 10 \
+                      --folds 10 \
                       --trails 300 \
                       --db-url mysql://root:1234@localhost/example \
                       --timeout 5000
