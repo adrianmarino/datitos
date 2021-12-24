@@ -5,7 +5,7 @@
 
 ### Notebooks
 
-* [Notebook: Model version 1](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2.ipynb)
+* [Notebook: Simple Model](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2.ipynb)
 * [Notebook: Model + optimizaiton](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-optimization.ipynb)
 
 #### Parallel Training
