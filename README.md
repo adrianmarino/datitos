@@ -38,7 +38,7 @@ $ python bin/train.py --device cpu \
                       --study study3 \
                       --folds 10 \
                       --trials 300 \
-                      --db-url mysql://root:lv3jg6@localhost/example \
+                      --db-url mysql://root:1234@localhost/example \
                       --timeout 5000
 ```
 
