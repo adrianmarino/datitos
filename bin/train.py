@@ -95,11 +95,12 @@ def objetive(trial, k_fold):
 def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, folds):
     set_device_name(device)
 
-    torch.cuda.set_per_process_memory_fraction(
-        cuda_process_memory_fraction, 
-        get_device()
-    )
-    torch.cuda.empty_cache()
+    if 'gpu' in device:
+        torch.cuda.set_per_process_memory_fraction(
+            cuda_process_memory_fraction, 
+            get_device()
+        )
+        torch.cuda.empty_cache()
 
     print(db_url)
     study_optimization = optuna.create_study(

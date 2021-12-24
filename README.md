@@ -12,6 +12,8 @@
 
 You can run a training into N workers. Each worker can be seen as a trial executor job. Each job train a model with a set of specific hyper params. All hyperparams -score pairs are stored into a maridb db. Finally you can load optuna study to get best hyperparams with hiest score. You can run a worker as next:
 
+**GPU**
+
 ```bash
 $ conda activate datitos 
 $ python bin/train.py --device gpu \
@@ -27,6 +29,18 @@ To run 10 workers repeat previous command into 10 distinct shell sessions (bash/
 
 On the other hand, you can run workers that use CPU or GPU. Normally a good configuration could be 2 CPU + 8 GPU workers. 
 This could be limited by the type of CPU, GPU and GPU and RAM memory. CPU workers parallelze k fold cross validation to decrese response time. GPU workers cant parallelize cv.
+
+**CPU**
+
+```bash
+$ conda activate datitos 
+$ python bin/train.py --device cpu \
+                      --study study3 \
+                      --folds 10 \
+                      --trials 300 \
+                      --db-url mysql://root:lv3jg6@localhost/example \
+                      --timeout 5000
+```
 
 To monitor workers you can use any of next tools:
 
