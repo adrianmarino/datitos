@@ -48,8 +48,8 @@ def objetive(trial):
 
     cv = KFoldCV(
         model_train_fn = train_model_1, 
-        k_fold         = 5,
-        callbacks      = [ValAccPruneCallback(trial), ReduceLROnPlateau(patience=50)],
+        k_fold         = k_fold,
+        callbacks      = [ValAccPruneCallback(trial)], # ReduceLROnPlateau(patience=50)],
         strategy       = strategy
     )
     return cv.train(
