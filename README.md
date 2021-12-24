@@ -17,7 +17,7 @@ $ conda activate datitos
 $ python bin/train.py --device gpu --studt study1
 ```
 
-To run 10 worker repeate previous commant under 10 distincs shells (bash/szh).
+To run 10 worker repeat previous command into 10 distinct shells (bash/szh).
 
 On the other hand, you cna run worker that use cpu or gpu. Normally a good configuration could be 2 cpu + 8 gpu workers. 
 This could be limited by the type of cpu, gpu and gpiu and ram memory.
