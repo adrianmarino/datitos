@@ -15,14 +15,14 @@ from utils import get_device
 class FifaModel1(CommonModel):
     def __init__(
         self, 
-        n_units, 
+        units_per_layer, 
         lr,
         momentum,
         dropout, 
         negative_slope
     ):
         model = Sequential(*dense_stack(
-            n_units, 
+            units_per_layer, 
             LeakyReLU(negative_slope=negative_slope), dropout), 
             Softmax(dim=1)
         )

@@ -14,12 +14,18 @@ from data      import to_single_col_df
 from fifa.model import FifaModel1
 
 def train_model_1(train_set, val_set, params, callbacks):
+
+    units_per_layer = \
+        [train_set[0].shape[1]] + \
+        [params['hidden_units'] for _ in range(params['hidden_layers'])] + \
+        [train_set[1].shape[1]]
+
     model = FifaModel1(
-        n_units        = [train_set[0].shape[1], params['hidden_units'], train_set[1].shape[1]],
-        lr             = params['lr'],
-        momentum       = params['momentum'],
-        dropout        = params['dropout'],
-        negative_slope = params['relu_neg_slope']
+        units_per_layer = units_per_layer,
+        lr              = params['lr'],
+        momentum        = params['momentum'],
+        dropout         = params['dropout'],
+        negative_slope  = params['relu_neg_slope']
     )
 
     model.fit(
