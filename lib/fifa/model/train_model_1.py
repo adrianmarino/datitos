@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 from sklearn.metrics import balanced_accuracy_score
 
@@ -14,6 +15,7 @@ from data      import to_single_col_df
 from fifa.model import FifaModel1
 
 def train_model_1(train_set, val_set, params, callbacks):
+    random.seed(params['seed'])
 
     units_per_layer = \
         [train_set[0].shape[1]] + \
