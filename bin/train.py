@@ -47,7 +47,7 @@ def cv_strategy(k_fold):
 
 def objetive(trial, k_fold):
     cv = KFoldCV(
-        model_train_fn = train_model_1, 
+        model_train_fn = train_model_1,
         k_fold         = k_fold,
         callbacks      = [ValAccPruneCallback(trial)], # ReduceLROnPlateau(patience=50)],
         strategy       = cv_strategy(k_fold)
@@ -57,22 +57,22 @@ def objetive(trial, k_fold):
         X,
         y,
         params = {
-            'hidden_layers':  trial.suggest_int  ('hidden_layers',  1,   5,      step = 1   ),
-            'hidden_units':   trial.suggest_int  ('hidden_units',   10,   500,   step = 10  ),
-            'lr':             trial.suggest_float('lr',             1e-7, 1e-1              ),
-            'momentum':       trial.suggest_float('momentum',       0.01, 0.9,   step = 0.01),
-            'dropout':        trial.suggest_float('dropout',        0.0,  0.4,   step = 0.01),
-            'batch_size':     trial.suggest_int  ('batch_size',     256,  1024,  step = 100 ),
-            'epochs':         trial.suggest_int  ('epochs',         100,  2000,  step = 10  ),
-            'seed':           trial.suggest_int  ('seed',           100,  1500,  step = 10  ),
-            'relu_neg_slope': trial.suggest_float('relu_neg_slope', 0.0,  0.4,   step = 0.01)
+            'hidden_layers':  trial.suggest_int  ('hidden_layers',  1,    1,    step = 1   ),
+            'hidden_units':   trial.suggest_int  ('hidden_units',   10,   300,  step = 10  ),
+            'lr':             trial.suggest_float('lr',             1e-5, 1e-1             ),
+            'momentum':       trial.suggest_float('momentum',       0.1,  0.9,  step = 0.01),
+            'dropout':        trial.suggest_float('dropout',        0.0,  0.2,  step = 0.01),
+            'batch_size':     trial.suggest_int  ('batch_size',     256,  512,  step = 100 ),
+            'epochs':         trial.suggest_int  ('epochs',         100,  1000, step = 100 ),
+            'seed':           trial.suggest_int  ('seed',           100,  1500, step = 10  ),
+            'relu_neg_slope': trial.suggest_float('relu_neg_slope', 0.0,  0.2,  step = 0.01)
         }
     )
 
 @click.command()
 @click.option(
-    '--device', 
-    default='cpu', 
+    '--device',
+    default='cpu',
     help='Device used to train and optimize model. Values: gpu, cpu.'
 )
 @click.option('--study',  default='my-studio-10', help='The study name.')
@@ -83,13 +83,13 @@ def objetive(trial, k_fold):
     help='maximum time spent optimizing hyper parameters in seconds.'
 )
 @click.option(
-    '--db-url',  
-    default='mysql://root:1234@localhost/example', 
+    '--db-url',
+    default='mysql://root:1234@localhost/example',
     help='Mariadb/MySQL connection url.'
 )
 @click.option(
-    '--cuda-process-memory-fraction', 
-    default=0.5, 
+    '--cuda-process-memory-fraction',
+    default=0.5,
     help='Setup max memory user per CUDA procees. Percentage expressed between 0 and 1'
 )
 @click.option('--folds',  default=5, help='Number of train dataset splits to apply cross validation.')
@@ -98,13 +98,13 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
 
     if 'gpu' in device:
         torch.cuda.set_per_process_memory_fraction(
-            cuda_process_memory_fraction, 
+            cuda_process_memory_fraction,
             get_device()
         )
         torch.cuda.empty_cache()
 
     study_optimization = optuna.create_study(
-        storage        = db_url, 
+        storage        = db_url,
         study_name     = study,
         load_if_exists = True,
         direction      = "maximize"
