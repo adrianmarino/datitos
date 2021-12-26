@@ -17,7 +17,7 @@ with DAG(
         'retry_delay': timedelta(seconds=10)
     },
     description       = 'Fifa: Train model and generate test result',
-    schedule_interval = '0 */3 * * *',
+    schedule_interval = '0 0 */1 * *',
     start_date        = days_ago(0),
     catchup           = False,
     tags              = ['fifa']
@@ -48,11 +48,11 @@ with DAG(
     def create_optimization_report_task():
         return BashTaskBuilder('optimization_report') \
             .var_fields({
-                'Device'       : 'train_device',
-                'Study'        : 'train_optuna_study',
-                'DB URL'       : 'train_optuna_db_url',
-                'Seeds Count:' : 'report_seeds_count',
-                'Folds'        : 'report_folds'
+                'Device'      : 'train_device',
+                'Study'       : 'train_optuna_study',
+                'DB URL'      : 'train_optuna_db_url',
+                'Seeds Count' : 'report_seeds_count',
+                'Folds'       : 'report_folds'
             }) \
             .script("""
             python bin/optmimization_report.py \

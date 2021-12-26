@@ -198,6 +198,7 @@ dependencies:
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.9=haebb681_0
   - pip:
+    - optuna-dashboard
     - click==8.0.3
     - deprecated==1.2.13
     - filelock==3.4.0
