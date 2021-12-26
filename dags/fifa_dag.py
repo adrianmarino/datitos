@@ -4,6 +4,7 @@ from airflow.utils.dates import days_ago
 from airflow.models import Variable
 from airflow.models.baseoperator import chain
 from dag_utils import BashTaskBuilder
+from slack_utils import task_fail_slack_alert
 
 with DAG(
     'FIFA',
@@ -11,8 +12,7 @@ with DAG(
         'owner': 'adrian',
         'depends_on_past':  False,
         'email': ['adrianmarino@gmail.com'],
-        'email_on_failure': False,
-        'email_on_retry':   False,
+        'on_failure_callback': task_fail_slack_alert,
         'retries': 5,
         'retry_delay': timedelta(seconds=10)
     },
