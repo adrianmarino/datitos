@@ -1,75 +1,12 @@
 from datetime import timedelta
-from textwrap import dedent
 from airflow import DAG
-from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
-import time
-
-
-class BashTaskBuilder:
-    def __init__(self, task_id, depends_on_past=False):
-        self.__task_id         = task_id
-        self.__depends_on_past = depends_on_past
-        self.__script          = ''
-        self.__content         = """
-        eval "$(conda shell.bash hook)"
-        conda activate datitos
-        cd {{ var.value.project_path }}
-        echo "---------------------------------------"
-        echo "| Conda Env: $CONDA_DEFAULT_ENV"
-        echo "| Task: {{ task.task_id }}"\n
-        """
-
-    def __append(self, value): self.__content += '{}\n'.format(value)
-    def __echo(self, value): self.__append('echo "| {}"'.format(value))
-    def __separator(self): self.__append('echo "---------------------------------------"')
-    
-    def var_fields(self, properties):
-        for (name, value) in properties.items():
-            self.var_field(name, value)
-        return self
-
-    def script(self, script):
-        self.__script = script
-        return self
-
-    def message(self, message):
-        self.__echo(message)
-        return self
-
-    def var_field(self, name, value):
-        self.__echo(name + ': {{ var.value.' + value + '}}')
-        return self
-
-    def field(self, name, value):
-        self.__echo('{}: {}'.format(name, value))
-        return self
-
-    def build(self):
-        self.__separator()
-        self.__echo('')
-        self.__echo('')
-        self.__separator()
-        self.__echo('SCRIPT')
-        self.__separator()
-
-        if self.__script:
-            self.__append(self.__script)
-        else:
-            self.__echo('Add script here...')
-
-        self.__separator()
-        self.__echo('')
-        self.__echo('')
-        return BashOperator(
-            task_id         = self.__task_id,
-            depends_on_past = self.__depends_on_past,
-            bash_command    = dedent(self.__content)
-        )
+from airflow.models.baseoperator import chain
+from dag_utils import BashTaskBuilder
 
 with DAG(
-    'train_and_test_fifa',
+    'FIFA',
     default_args = {
         'owner': 'adrian',
         'depends_on_past':  False,
@@ -80,8 +17,8 @@ with DAG(
         'retry_delay': timedelta(seconds=10)
     },
     description       = 'Fifa: Train model and generate test result',
-    schedule_interval = '0 0 */3 * * *',
-    start_date        = days_ago(2),
+    schedule_interval = '0 */3 * * *',
+    start_date        = days_ago(0),
     catchup           = False,
     tags              = ['fifa']
 ) as dag:
@@ -143,14 +80,12 @@ with DAG(
             """) \
             .build()
 
-    # Workflow...
-    train_1 = create_train_tasks(1)
-    train_2 = create_train_tasks(2)
-    train_3 = create_train_tasks(3)
-    train_4 = create_train_tasks(4)
-    train_5 = create_train_tasks(5)
-    train_6 = create_train_tasks(6)
-    optimization_report = create_optimization_report_task()
-    test_model = create_test_task()
+    # Create all tasks...
+    workers_count = int(Variable.get('train_workers_count'))
 
-    [train_1, train_2, train_3, train_4, train_5, train_6] >> optimization_report >> test_model
+    train_workers       = [create_train_tasks(id) for id in range(1, workers_count+1)]
+    optimization_report = create_optimization_report_task()
+    test_model          = create_test_task()
+
+    # Workflow...
+    train_workers >> optimization_report >> test_model

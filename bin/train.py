@@ -62,7 +62,7 @@ def objetive(trial, k_fold):
             'lr':             trial.suggest_float('lr',             1e-7, 1e-1              ),
             'momentum':       trial.suggest_float('momentum',       0.01, 0.9,   step = 0.01),
             'dropout':        trial.suggest_float('dropout',        0.0,  0.4,   step = 0.01),
-            'batch_size':     trial.suggest_int  ('batch_size',     256,  512,   step = 32  ),
+            'batch_size':     trial.suggest_int  ('batch_size',     256,  1024,  step = 100 ),
             'epochs':         trial.suggest_int  ('epochs',         100,  2000,  step = 10  ),
             'seed':           trial.suggest_int  ('seed',           100,  1500,  step = 10  ),
             'relu_neg_slope': trial.suggest_float('relu_neg_slope', 0.0,  0.4,   step = 0.01)
