@@ -105,6 +105,7 @@ Options:
 #### Test model
 
 ```bash
+$ conda activate datitos
 $ python  bin/test_model.py \
     --study study6 \
     --db-url mysql://root:1234@localhost/example \
