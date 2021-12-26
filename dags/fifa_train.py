@@ -149,7 +149,8 @@ with DAG(
     train_3 = create_train_tasks(3)
     train_4 = create_train_tasks(4)
     train_5 = create_train_tasks(5)
+    train_6 = create_train_tasks(6)
     optimization_report = create_optimization_report_task()
     test_model = create_test_task()
 
-    [train_1, train_2, train_3, train_4, train_5] >> optimization_report >> test_model
+    [train_1, train_2, train_3, train_4, train_5, train_6] >> optimization_report >> test_model
