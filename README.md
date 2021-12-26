@@ -69,3 +69,60 @@ Options:
                                   cross validation.
   --help                          Show this message and exit.
 ```
+
+
+### Optimization report
+
+```bash
+$ conda activate datitos
+$ python bin/optmimization_report.py \
+    --study study6 \
+    --db-url mysql://root:1234@localhost/example \
+    --device gpu \
+    --seeds-count 3 \
+    --folds 2
+```
+
+See script help:
+
+```bash
+$ python  bin/optmimization_report.py --help
+
+Usage: optmimization_report.py [OPTIONS]
+
+Options:
+  --device TEXT          Device used to train and optimize model. Values: gpu,
+                         cpu.
+  --study TEXT           The study name.
+  --db-url TEXT          Mariadb/MySQL connection url.
+  --report-path TEXT     Path where save optimization plots.
+  --seeds-count INTEGER  seeds count used calculate acuracy distribution
+  --folds INTEGER        Number of train dataset splits to apply cross
+                         validation.
+  --help                 Show this message and exit.
+  ```
+
+#### Test model
+
+```bash
+$ python  bin/test_model.py \
+    --study study6 \
+    --db-url mysql://root:1234@localhost/example \
+    --device gpu
+```
+
+See script help:
+
+```bash
+$ python bin/test_model.py --help
+
+Usage: test_model.py [OPTIONS]
+
+Options:
+  --device TEXT       Device used to train and optimize model. Values: gpu,
+                      cpu.
+  --study TEXT        The study name.
+  --db-url TEXT       Mariadb/MySQL connection url.
+  --result-path TEXT  path where test predictions are saved.
+  --help              Show this message and exit.
+```

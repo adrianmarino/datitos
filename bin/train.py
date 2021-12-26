@@ -103,7 +103,6 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
         )
         torch.cuda.empty_cache()
 
-    print(db_url)
     study_optimization = optuna.create_study(
         storage        = db_url, 
         study_name     = study,

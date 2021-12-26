@@ -80,13 +80,11 @@ with DAG(
         'retry_delay': timedelta(seconds=10)
     },
     description       = 'Fifa: Train model and generate test result',
-    schedule_interval = '* */2 * * *',
+    schedule_interval = '0 0 */3 * * *',
     start_date        = days_ago(2),
     catchup           = False,
     tags              = ['fifa']
 ) as dag:
-    Variable.set('project_path', '/home/adrian/development/machine-learning/datitos')
-
     def create_train_tasks(worker_id):
         return BashTaskBuilder('train_worker_{}'.format(worker_id)) \
             .var_fields({
@@ -99,24 +97,50 @@ with DAG(
                 'Timeout' : 'train_optuna_timeout'
             }) \
             .script("""
-            python bin/train.py --device {{ var.value.train_device }} \
+            python bin/train.py \
+                --device {{ var.value.train_device }} \
                 --cuda-process-memory-fraction {{ var.value.train_cuda_process_memory_fraction }} \
                 --folds {{ var.value.train_folds }} \
                 --study {{ var.value.train_optuna_study }} \
-                --trials {{ var.value.train_optuna_trials }} \
                 --db-url {{ var.value.train_optuna_db_url }} \
+                --trials {{ var.value.train_optuna_trials }} \
                 --timeout {{ var.value.train_optuna_timeout }}
             """) \
             .build()
 
-    def create_check_random_shots_task():
-        return BashTaskBuilder('random_shots_check') \
-            .message('Check model random shots') \
+    def create_optimization_report_task():
+        return BashTaskBuilder('optimization_report') \
+            .var_fields({
+                'Device'       : 'train_device',
+                'Study'        : 'train_optuna_study',
+                'DB URL'       : 'train_optuna_db_url',
+                'Seeds Count:' : 'report_seeds_count',
+                'Folds'        : 'report_folds'
+            }) \
+            .script("""
+            python bin/optmimization_report.py \
+                --device {{ var.value.train_device }} \
+                --folds {{ var.value.train_folds }} \
+                --study {{ var.value.train_optuna_study }} \
+                --db-url {{ var.value.train_optuna_db_url }} \
+                --seeds-count {{ var.value.report_seeds_count }} \
+                --folds {{ var.value.report_folds }}
+            """) \
             .build()
 
     def create_test_task():
         return BashTaskBuilder('test_model') \
-            .message('Evaluate model under test set') \
+            .var_fields({
+                'Device'       : 'train_device',
+                'Study'        : 'train_optuna_study',
+                'DB URL'       : 'train_optuna_db_url'
+            }) \
+            .script("""
+            python bin/test_model.py \
+                --study {{ var.value.train_optuna_study }} \
+                --db-url {{ var.value.train_optuna_db_url }} \
+                --device {{ var.value.train_device }}
+            """) \
             .build()
 
     # Workflow...
@@ -125,7 +149,7 @@ with DAG(
     train_3 = create_train_tasks(3)
     train_4 = create_train_tasks(4)
     train_5 = create_train_tasks(5)
-    check_random_shots = create_check_random_shots_task()
-    test    = create_test_task()
+    optimization_report = create_optimization_report_task()
+    test_model = create_test_task()
 
-    [train_1, train_2, train_3, train_4, train_5] >> check_random_shots >> test
+    [train_1, train_2, train_3, train_4, train_5] >> optimization_report >> test_model
