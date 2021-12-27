@@ -19,7 +19,6 @@ from model.kfoldcv  import KFoldCV, \
                            NonParallelKFoldCVStrategy
 
 from optimizer import optimizer_sumary, \
-                      ValAccPruneCallback, \
                       plot_trials_metric_dist
 
 from fifa.model import train_model_1
@@ -36,7 +35,6 @@ from plot import plot_hist, \
 
 from optuna.visualization import plot_contour, \
                                  plot_edf, \
-                                 plot_intermediate_values, \
                                  plot_optimization_history, \
                                  plot_parallel_coordinate, \
                                  plot_param_importances, \
@@ -44,6 +42,12 @@ from optuna.visualization import plot_contour, \
 
 from file_utils import create_dir
 
+def load_dataset():
+    dataset = FifaDataset(
+        train_path = './tp2/dataset/fifa2021_training.csv',
+        test_path  = './tp2/dataset/fifa2021_test.csv'
+    )
+    return dataset.train_features_target()
 
 def generate_plots(study, path, seeds_count, folds):
     create_dir(path)
@@ -54,10 +58,10 @@ def generate_plots(study, path, seeds_count, folds):
     plot_parallel_coordinate(study)
     plt.savefig('{}/{}-parallel_coordinate.png'.format(path, study.study_name))
 
-    fig3 = plot_param_importances(study)
+    plot_param_importances(study)
     plt.savefig('{}/{}-param_importances.png'.format(path, study.study_name))
 
-    fig4 = plot_slice(study)
+    plot_slice(study)
     plt.savefig('{}/{}-slice.png'.format(path, study.study_name))
 
     fig5 = plot_contour(study, params=["epochs", "lr"])
@@ -68,14 +72,10 @@ def generate_plots(study, path, seeds_count, folds):
     fig6.update_layout(width=500, height=500)
     plt.savefig('{}/{}-edf.png'.format(path, study.study_name))
 
-    fig7 = plot_trials_metric_dist(study)
+    plot_trials_metric_dist(study)
     plt.savefig('{}/{}-trials_metric_dist.png'.format(path, study.study_name))
 
-    dataset = FifaDataset(
-        train_path = './tp2/dataset/fifa2021_training.csv',
-        test_path  = './tp2/dataset/fifa2021_test.csv'
-    )
-    X, y = dataset.train_features_target()
+    X, y = load_dataset()
 
     accs = get_accuracy_dist(study, seeds_count, folds, X, y)
     print(accs)
@@ -145,10 +145,7 @@ def main(device, study, db_url, report_path, seeds_count, folds):
     set_device_name(device)
     setup_gpu(device)
 
-    study = optuna.load_study(
-        storage    = db_url, 
-        study_name = study
-    )
+    study = optuna.load_study(storage = db_url, study_name = study)
     optimizer_sumary(study)
 
     generate_plots(study, report_path, seeds_count, folds)

@@ -1,30 +1,21 @@
 # -*- coding: utf-8 -*-
 import sys
-sys.path.append('./lib')
-
 import warnings
+
+sys.path.append('./lib')
 warnings.filterwarnings("ignore")
 
 import click
 from datetime import datetime
 from logger import initialize_logger
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import optuna
 import torch
 from data         import to_single_col_df
 from fifa.dataset import FifaDataset
 from fifa.model   import FifaModel1
-
-from utils import set_device_name, \
-                  get_device_name, \
-                  get_device, \
-                  dict_join
-
-from plot import plot_hist, \
-                 local_bin
-
+from utils import set_device_name, get_device
 from file_utils import create_dir
 
 
@@ -94,10 +85,7 @@ def main(device, study, db_url, result_path):
     set_device_name(device)
     setup_gpu(device)
 
-    study = optuna.load_study(
-        storage    = db_url, 
-        study_name = study
-    )
+    study = optuna.load_study(storage = db_url, study_name = study)
 
     dataset = FifaDataset(
         train_path = './tp2/dataset/fifa2021_training.csv',
@@ -110,7 +98,6 @@ def main(device, study, db_url, result_path):
     y_pred = to_single_col_df(model.predict(dataset.test_features()))
 
     save_result(result_path, study, y_pred, dataset)
-
 
 if __name__ == '__main__':
     initialize_logger()
