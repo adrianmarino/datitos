@@ -15,7 +15,7 @@ import torch
 from data         import to_single_col_df
 from fifa.dataset import FifaDataset
 from fifa.model   import FifaModel1
-from utils import set_device_name, get_device
+from utils import set_device_name, get_device, dict_join
 from file_utils import create_dir
 
 
@@ -93,7 +93,9 @@ def main(device, study, db_url, result_path):
     )
     X, y = dataset.train_features_target()
 
-    model = train_model(X, y, params = study.best_trial.params)
+    hyper_params = dict_join(study.best_trial.params, {'hidden_layers': 1})
+
+    model = train_model(X, y, params = hyper_params)
 
     y_pred = to_single_col_df(model.predict(dataset.test_features()))
 
