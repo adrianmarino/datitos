@@ -1,6 +1,5 @@
 # Datitos
 
-
 ## TP2
 
 ### Notebooks
