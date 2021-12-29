@@ -12,7 +12,6 @@ from logger import initialize_logger
 
 import click
 import optuna
-import torch
 
 from model.kfoldcv import KFoldCV, \
                           ParallelKFoldCVStrategy, \
