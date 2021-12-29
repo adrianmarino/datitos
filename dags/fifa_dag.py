@@ -24,7 +24,7 @@ with DAG(
     tags              = ['fifa']
 ) as dag:
     def create_train_tasks(worker_id):
-        return BashTaskBuilder('train_worker_{}'.format(worker_id)) \
+        return BashTaskBuilder('train_model_worker_{}'.format(worker_id)) \
             .var_fields({
                 'Device'  : 'train_device',
                 'Cuda mem': 'train_cuda_process_memory_fraction',
@@ -35,7 +35,7 @@ with DAG(
                 'Timeout' : 'train_optuna_timeout'
             }) \
             .script("""
-            python bin/train.py \
+            python bin/train_model.py \
                 --device {{ var.value.train_device }} \
                 --cuda-process-memory-fraction {{ var.value.train_cuda_process_memory_fraction }} \
                 --folds {{ var.value.train_folds }} \

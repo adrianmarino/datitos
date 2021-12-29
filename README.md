@@ -15,13 +15,13 @@ You can run a training into N workers. Each worker can be seen as a trial execut
 
 ```bash
 $ conda activate datitos 
-$ python bin/train.py --device gpu \
-                      --study study3 \
-                      --cuda-process-memory-fraction 0.1 \
-                      --folds 5 \
-                      --trials 300 \
-                      --db-url mysql://root:1234@localhost/example \
-                      --timeout 5000
+$ python bin/train_model.py --device gpu \
+                            --study study3 \
+                            --cuda-process-memory-fraction 0.1 \
+                            --folds 5 \
+                            --trials 300 \
+                            --db-url mysql://root:1234@localhost/example \
+                            --timeout 5000
 ```
 
 To run 10 workers repeat previous command into 10 distinct shell sessions (bash/szh).

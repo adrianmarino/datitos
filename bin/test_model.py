@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 import sys
 import warnings
 
@@ -13,20 +16,24 @@ import pandas as pd
 import optuna
 import torch
 from data         import to_single_col_df
+
 from fifa.dataset import FifaDataset
 from fifa.model   import FifaModel1
-from utils import set_device_name, get_device, dict_join
-from file_utils import create_dir
 
-
-def setup_gpu(device, cuda_process_memory_fraction=0.2):
-    if 'gpu' in device:
-        torch.cuda.set_per_process_memory_fraction(
-            cuda_process_memory_fraction, 
-            get_device()
-        )
-        torch.cuda.empty_cache()
-
+from device_utils import set_device_name, \
+                         get_device, \
+                         set_device_memory
+from dict_utils   import dict_join
+from file_utils   import create_dir
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Functions
+# -----------------------------------------------------------------------------
 def train_model(X, y, params):
     np.random.seed(params['seed'])
     
@@ -62,8 +69,15 @@ def save_result(result_path, study, y_pred, dataset):
     create_dir(result_path)
     filename = "{}/{}-predict-{:%Y-%m-%d_%H-%M-%S}.csv".format(result_path, study.study_name, datetime.now())
     test_data.to_csv(filename, index=False)
-
-
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
 @click.command()
 @click.option(
     '--device',
@@ -81,16 +95,19 @@ def save_result(result_path, study, y_pred, dataset):
     default='./results',
     help='path where test predictions are saved.'
 )
-def main(device, study, db_url, result_path):
+@click.option(
+    '--cuda-process-memory-fraction',
+    default=0.5,
+    help='Setup max memory user per CUDA procees. Percentage expressed between 0 and 1'
+)
+def main(device, study, db_url, result_path, cuda_process_memory_fraction):
+    initialize_logger()
     set_device_name(device)
-    setup_gpu(device)
-
+    set_device_memory(device, cuda_process_memory_fraction)
+ 
     study = optuna.load_study(storage = db_url, study_name = study)
 
-    dataset = FifaDataset(
-        train_path = './tp2/dataset/fifa2021_training.csv',
-        test_path  = './tp2/dataset/fifa2021_test.csv'
-    )
+    dataset = FifaDataset()
     X, y = dataset.train_features_target()
 
     hyper_params = dict_join(study.best_trial.params, {'hidden_layers': 1})
@@ -102,5 +119,5 @@ def main(device, study, db_url, result_path):
     save_result(result_path, study, y_pred, dataset)
 
 if __name__ == '__main__':
-    initialize_logger()
     main()
+# -----------------------------------------------------------------------------

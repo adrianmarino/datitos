@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 import sys
 import warnings
 
@@ -6,29 +9,43 @@ sys.path.append('./lib')
 warnings.filterwarnings("ignore")
 
 from logger import initialize_logger
+
 import click
 import optuna
 import torch
 
-from model.kfoldcv  import KFoldCV, \
-                           ParallelKFoldCVStrategy, \
-                           NonParallelKFoldCVStrategy
+from model.kfoldcv import KFoldCV, \
+                          ParallelKFoldCVStrategy, \
+                          NonParallelKFoldCVStrategy
 
 from optimizer import optimizer_sumary, \
                       ValAccPruneCallback
 
 from fifa.dataset import FifaDataset
+from fifa.model   import train_model_1
 
-from fifa.model import train_model_1
+from device_utils import set_device_name, \
+                         get_device_name, \
+                         get_device, \
+                         set_device_memory
 
-from utils import set_device_name, \
-                  get_device_name, \
-                  get_device
+from dict_utils   import dict_join
 
 from optuna.pruners import HyperbandPruner
-
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Functions
+# -----------------------------------------------------------------------------
 def cv_strategy(k_fold):
-    return ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
+    if 'cpu' == get_device_name():
+        return ParallelKFoldCVStrategy(processes=k_fold)
+    else:
+        return NonParallelKFoldCVStrategy()
 
 def objetive(trial, k_fold, X, y):
     cv = KFoldCV(
@@ -53,22 +70,15 @@ def objetive(trial, k_fold, X, y):
             'relu_neg_slope': trial.suggest_float('relu_neg_slope', 0.0,  0.4,   step = 0.01)
         }
     )
-
-def setup_gpu(device, cuda_process_memory_fraction=0.2):
-    if 'gpu' in device:
-        torch.cuda.set_per_process_memory_fraction(
-            cuda_process_memory_fraction, 
-            get_device()
-        )
-        torch.cuda.empty_cache()
-
-def load_dataset():
-    dataset = FifaDataset(
-        train_path = './tp2/dataset/fifa2021_training.csv',
-        test_path  = './tp2/dataset/fifa2021_test.csv'
-    )
-    return dataset.train_features_target()
-
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
 @click.command()
 @click.option(
     '--device',
@@ -94,10 +104,11 @@ def load_dataset():
 )
 @click.option('--folds',  default=5, help='Number of train dataset splits to apply cross validation.')
 def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, folds):
+    initialize_logger()
     set_device_name(device)
-    setup_gpu(device, cuda_process_memory_fraction)
+    set_device_memory(device, cuda_process_memory_fraction)
 
-    X, y = load_dataset()
+    X, y = FifaDataset.load_train_features_target()
 
     study_optimization = optuna.create_study(
         storage        = db_url,
@@ -116,5 +127,5 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
     optimizer_sumary(study_optimization)
 
 if __name__ == '__main__':
-    initialize_logger()
     main()
+# -----------------------------------------------------------------------------

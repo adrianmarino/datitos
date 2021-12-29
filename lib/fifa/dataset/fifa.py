@@ -34,10 +34,17 @@ class FifaDataset:
 
     CAL_COLS = [ 'PreferredFoot', 'PlayerWorkRate']
 
+    @staticmethod
+    def load_train_features_target(
+            train_path = './tp2/dataset/fifa2021_training.csv',
+            test_path  = './tp2/dataset/fifa2021_test.csv',
+    ):
+        return FifaDataset(train_path, test_path).train_features_target()
+
     def __init__(
         self, 
-        train_path = './dataset/fifa2021_training.csv',
-        test_path  = './dataset/fifa2021_test.csv'
+        train_path = './tp2/dataset/fifa2021_training.csv',
+        test_path  = './tp2/dataset/fifa2021_test.csv'
     ):
         self.__train_set = pd.read_csv(train_path)
         self.__test_set  = pd.read_csv(test_path)

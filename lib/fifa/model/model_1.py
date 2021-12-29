@@ -10,7 +10,7 @@ from model  import CommonModel, \
                    softmax_pred_out, \
                    dense_stack
 
-from utils import get_device
+from device_utils import get_device
 
 class FifaModel1(CommonModel):
     def __init__(

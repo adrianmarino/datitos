@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 import sys
 sys.path.append('./lib')
 
@@ -21,14 +24,14 @@ from model.kfoldcv  import KFoldCV, \
 from optimizer import optimizer_sumary, \
                       plot_trials_metric_dist
 
-from fifa.model import train_model_1
-
-from utils import set_device_name, \
-                  get_device_name, \
-                  get_device, \
-                  dict_join
-
+from fifa.model   import train_model_1
 from fifa.dataset import FifaDataset
+
+from device_utils import set_device_name, \
+                         get_device, \
+                         set_device_memory
+from dict_utils   import dict_join
+from file_utils   import create_dir
 
 from plot import plot_hist, \
                  local_bin
@@ -39,16 +42,15 @@ from optuna.visualization import plot_contour, \
                                  plot_parallel_coordinate, \
                                  plot_param_importances, \
                                  plot_slice
-
-from file_utils import create_dir
-
-def load_dataset():
-    dataset = FifaDataset(
-        train_path = './tp2/dataset/fifa2021_training.csv',
-        test_path  = './tp2/dataset/fifa2021_test.csv'
-    )
-    return dataset.train_features_target()
-
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Functions
+# -----------------------------------------------------------------------------
 def generate_plots(study, path, seeds_count, folds):
     create_dir(path)
  
@@ -94,7 +96,7 @@ def generate_plots(study, path, seeds_count, folds):
     plot_trials_metric_dist(study)
     plt.savefig('{}/{}-trials_metric_dist.png'.format(path, study.study_name))
 
-    X, y = load_dataset()
+    X, y = FifaDataset.load_train_features_target()
 
     accs = get_accuracy_dist(study, seeds_count, folds, X, y)
     print(accs)
@@ -108,14 +110,6 @@ def generate_plots(study, path, seeds_count, folds):
 
 def cv_strategy(k_fold):
     return ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
-
-def setup_gpu(device, cuda_process_memory_fraction=0.2):
-    if 'gpu' in device:
-        torch.cuda.set_per_process_memory_fraction(
-            cuda_process_memory_fraction, 
-            get_device()
-        )
-        torch.cuda.empty_cache()
 
 def get_accuracy_dist(study, seeds_count, folds, X, y):
     seeds             = random.sample(range(1,1000), seeds_count)
@@ -132,7 +126,15 @@ def get_accuracy_dist(study, seeds_count, folds, X, y):
         accs.append(cv.train(X, y, params = dict_join({ 'seed': seed, 'hidden_layers': 1 }, best_hyper_params)))
     
     return accs
-
+# -----------------------------------------------------------------------------
+#
+#
+#
+#
+#
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
 @click.command()
 @click.option(
     '--device',
@@ -161,8 +163,9 @@ def get_accuracy_dist(study, seeds_count, folds, X, y):
     help='Number of train dataset splits to apply cross validation.'
 )
 def main(device, study, db_url, report_path, seeds_count, folds):
+    initialize_logger()
     set_device_name(device)
-    setup_gpu(device)
+    set_device_memory(device)
 
     study = optuna.load_study(storage = db_url, study_name = study)
     optimizer_sumary(study)
@@ -170,5 +173,5 @@ def main(device, study, db_url, report_path, seeds_count, folds):
     generate_plots(study, report_path, seeds_count, folds)
 
 if __name__ == '__main__':
-    initialize_logger()
     main()
+# -----------------------------------------------------------------------------

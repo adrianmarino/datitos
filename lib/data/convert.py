@@ -1,6 +1,6 @@
 import torch
 import pandas as pd
-from utils import get_device
+from device_utils import get_device
 
 def df_to_tensor(data_frame, device=None):  
     device = device if device else get_device()  

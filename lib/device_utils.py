@@ -16,6 +16,13 @@ def get_device(i=0):
  
     return torch.device(name)
 
+def set_device_memory(device_name, process_memory_fraction=0.5):
+    if 'gpu' in device_name:
+        torch.cuda.set_per_process_memory_fraction(
+            process_memory_fraction, 
+            get_device()
+        )
+        torch.cuda.empty_cache()
         
 def dict_join(a, b):
     a.copy()
