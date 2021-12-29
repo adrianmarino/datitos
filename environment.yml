@@ -6,8 +6,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python=3.9.7
+  - pylint
   - python-kaleido
-  - cudatoolkit=11.1.74
   - jupyterlab
   - lame
   - matplotlib
@@ -17,7 +18,6 @@ dependencies:
   - pandas
   - pip
   - plotly
-  - python=3.9.7
   - pytorch
   - scikit-learn
   - scipy

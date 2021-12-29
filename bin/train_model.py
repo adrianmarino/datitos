@@ -4,14 +4,12 @@
 # -----------------------------------------------------------------------------
 import sys
 import warnings
-
 sys.path.append('./lib')
 warnings.filterwarnings("ignore")
 
-from logger import initialize_logger
-
 import click
 import optuna
+from logger import initialize_logger
 
 from model.kfoldcv import KFoldCV, \
                           ParallelKFoldCVStrategy, \
@@ -41,10 +39,9 @@ from optuna.pruners import HyperbandPruner
 # Functions
 # -----------------------------------------------------------------------------
 def cv_strategy(k_fold):
-    if 'cpu' == get_device_name():
+    if 'cpu' == get_device_name(): 
         return ParallelKFoldCVStrategy(processes=k_fold)
-    else:
-        return NonParallelKFoldCVStrategy()
+    return NonParallelKFoldCVStrategy()
 
 def objetive(trial, k_fold, X, y):
     cv = KFoldCV(
@@ -107,8 +104,6 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
     set_device_name(device)
     set_device_memory(device, cuda_process_memory_fraction)
 
-    X, y = FifaDataset.load_train_features_target()
-
     study_optimization = optuna.create_study(
         storage        = db_url,
         study_name     = study,
@@ -116,6 +111,8 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
         direction      = "maximize",
         pruner         = HyperbandPruner()
     )
+
+    X, y = FifaDataset.load_train_features_target()
 
     study_optimization.optimize(
         lambda trial: objetive(trial, folds, X, y),
