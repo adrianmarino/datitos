@@ -14,7 +14,8 @@ def train_fold(
         train_set = (X.iloc[train_idx], y.iloc[train_idx]),
         val_set   = (X.iloc[val_idx],   y.iloc[val_idx]),
         params    = params,
-        callbacks = callbacks
+        callbacks = callbacks,
+        fold      = fold
     )
     logging.info('Fold {} - Score: {}'.format(fold + 1, score))
 

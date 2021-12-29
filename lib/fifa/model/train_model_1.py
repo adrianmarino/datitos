@@ -13,8 +13,9 @@ from metrics   import show_summary
 from data      import to_single_col_df
 
 from fifa.model import FifaModel1
+from optuna.exceptions import TrialPruned
 
-def train_model_1(train_set, val_set, params, callbacks):
+def train_model_1(train_set, val_set, params, callbacks, fold, trial = None):
     random.seed(params['seed'])
 
     units_per_layer = \
@@ -47,4 +48,12 @@ def train_model_1(train_set, val_set, params, callbacks):
     y_true = to_single_col_df(np.argmax(val_set[1].values, axis=1))
     y_pred = to_single_col_df(model.predict(val_set[0]))
 
-    return balanced_accuracy_score(y_true, y_pred)
+    accuracy = balanced_accuracy_score(y_true, y_pred)
+
+    if trial:
+        # Handle pruning based on the intermediate value.
+        trial.report(accuracy, fold)
+        if trial.should_prune():
+            raise TrialPruned()
+
+    return accuracy

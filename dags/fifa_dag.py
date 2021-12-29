@@ -14,7 +14,8 @@ with DAG(
         'email': ['adrianmarino@gmail.com'],
         'on_failure_callback': task_fail_slack_alert,
         'retries': 5,
-        'retry_delay': timedelta(seconds=10)
+        'retry_delay': timedelta(seconds=10),
+        'max_active_runs': 1 
     },
     description       = 'Fifa: Train model and generate test result',
     schedule_interval = '0 0 */1 * *',

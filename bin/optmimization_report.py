@@ -51,26 +51,45 @@ def load_dataset():
 
 def generate_plots(study, path, seeds_count, folds):
     create_dir(path)
-    fig1 = plot_optimization_history(study)
-    fig1.update_layout(width=1000, height=500)
-    plt.savefig('{}/{}-optimization_history.png'.format(path, study.study_name))
+ 
+    fig = plot_optimization_history(study)
+    fig.update_layout(width=1000, height=500)
+    fig.write_image(
+        '{}/{}-optimization_history.png'.format(path, study.study_name),
+        engine="kaleido"
+    )
+    
+    fig = plot_parallel_coordinate(study)
+    fig.write_image(
+        '{}/{}-parallel_coordinate.png'.format(path, study.study_name), 
+        engine="kaleido"
+    )
 
-    plot_parallel_coordinate(study)
-    plt.savefig('{}/{}-parallel_coordinate.png'.format(path, study.study_name))
+    fig = plot_param_importances(study)
+    fig.write_image(
+        '{}/{}-param_importances.png'.format(path, study.study_name), 
+        engine="kaleido"
+    )
 
-    plot_param_importances(study)
-    plt.savefig('{}/{}-param_importances.png'.format(path, study.study_name))
+    fig = plot_slice(study)
+    fig.write_image(
+        '{}/{}-slice.png'.format(path, study.study_name), 
+        engine="kaleido"
+    )
 
-    plot_slice(study)
-    plt.savefig('{}/{}-slice.png'.format(path, study.study_name))
+    fig = plot_contour(study, params=["epochs", "lr"])
+    fig.update_layout(width=1000, height=800)
+    fig.write_image(
+        '{}/{}-contour.png'.format(path, study.study_name), 
+        engine="kaleido"
+    )
 
-    fig5 = plot_contour(study, params=["epochs", "lr"])
-    fig5.update_layout(width=1000, height=800)
-    plt.savefig('{}/{}-contour.png'.format(path, study.study_name))
-
-    fig6 = plot_edf(study)
-    fig6.update_layout(width=500, height=500)
-    plt.savefig('{}/{}-edf.png'.format(path, study.study_name))
+    fig = plot_edf(study)
+    fig.update_layout(width=500, height=500)
+    fig.write_image(
+        '{}/{}-edf.png'.format(path, study.study_name), 
+        engine="kaleido"
+    )
 
     plot_trials_metric_dist(study)
     plt.savefig('{}/{}-trials_metric_dist.png'.format(path, study.study_name))
@@ -110,7 +129,7 @@ def get_accuracy_dist(study, seeds_count, folds, X, y):
             k_fold = folds, 
             strategy = cv_strategy(folds)
         )
-        accs.append(cv.train(X, y, params = dict_join({ 'seed': seed }, best_hyper_params)))
+        accs.append(cv.train(X, y, params = dict_join({ 'seed': seed, 'hidden_layers': 1 }, best_hyper_params)))
     
     return accs
 

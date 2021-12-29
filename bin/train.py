@@ -25,15 +25,16 @@ from utils import set_device_name, \
                   get_device_name, \
                   get_device
 
+from optuna.pruners import HyperbandPruner
 
 def cv_strategy(k_fold):
     return ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
 
 def objetive(trial, k_fold, X, y):
     cv = KFoldCV(
-        model_train_fn = train_model_1,
+        model_train_fn = lambda train_set, val_set, params, callbacks, fold: train_model_1(train_set, val_set, params, callbacks, fold, trial),
         k_fold         = k_fold,
-        callbacks      = [ValAccPruneCallback(trial)],
+        callbacks      = [],
         strategy       = cv_strategy(k_fold)
     )
 
@@ -102,7 +103,8 @@ def main(device, study, trials, timeout, db_url, cuda_process_memory_fraction, f
         storage        = db_url,
         study_name     = study,
         load_if_exists = True,
-        direction      = "maximize"
+        direction      = "maximize",
+        pruner         = HyperbandPruner()
     )
 
     study_optimization.optimize(
