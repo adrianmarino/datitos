@@ -67,7 +67,7 @@ def save_result(result_path, study, y_pred, dataset):
     })
 
     create_dir(result_path)
-    filename = "{}/{}-predict-{:%Y-%m-%d_%H-%M-%S}.csv".format(result_path, study.study_name, datetime.now())
+    filename = '/{}-predict-{:%Y-%m-%d_%H-%M-%S}.csv'.format(result_path, study.study_name, datetime.now())
     test_data.to_csv(filename, index=False)
 # -----------------------------------------------------------------------------
 #

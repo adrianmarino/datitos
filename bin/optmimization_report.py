@@ -28,20 +28,20 @@ from fifa.model   import train_model_1
 from fifa.dataset import FifaDataset
 
 from device_utils import set_device_name, \
-                         get_device, \
+                         get_device_name, \
                          set_device_memory
+
 from dict_utils   import dict_join
 from file_utils   import create_dir
 
-from plot import plot_hist, \
-                 local_bin
-
-from optuna.visualization import plot_contour, \
-                                 plot_edf, \
-                                 plot_optimization_history, \
-                                 plot_parallel_coordinate, \
-                                 plot_param_importances, \
-                                 plot_slice
+from optimizer import save_contour_plot, \
+                      save_edf_plot, \
+                      save_optimization_history_plot, \
+                      save_parallel_coordinate_plot, \
+                      save_param_importances_plot, \
+                      save_slice_plot, \
+                      save_trials_metric_dist_post, \
+                      save_accurary_plot
 # -----------------------------------------------------------------------------
 #
 #
@@ -51,65 +51,8 @@ from optuna.visualization import plot_contour, \
 # -----------------------------------------------------------------------------
 # Functions
 # -----------------------------------------------------------------------------
-def generate_plots(study, path, seeds_count, folds):
-    create_dir(path)
- 
-    fig = plot_optimization_history(study)
-    fig.update_layout(width=1000, height=500)
-    fig.write_image(
-        '{}/{}-optimization_history.png'.format(path, study.study_name),
-        engine="kaleido"
-    )
-    
-    fig = plot_parallel_coordinate(study)
-    fig.write_image(
-        '{}/{}-parallel_coordinate.png'.format(path, study.study_name), 
-        engine="kaleido"
-    )
-
-    fig = plot_param_importances(study)
-    fig.write_image(
-        '{}/{}-param_importances.png'.format(path, study.study_name), 
-        engine="kaleido"
-    )
-
-    fig = plot_slice(study)
-    fig.write_image(
-        '{}/{}-slice.png'.format(path, study.study_name), 
-        engine="kaleido"
-    )
-
-    fig = plot_contour(study, params=["epochs", "lr"])
-    fig.update_layout(width=1000, height=800)
-    fig.write_image(
-        '{}/{}-contour.png'.format(path, study.study_name), 
-        engine="kaleido"
-    )
-
-    fig = plot_edf(study)
-    fig.update_layout(width=500, height=500)
-    fig.write_image(
-        '{}/{}-edf.png'.format(path, study.study_name), 
-        engine="kaleido"
-    )
-
-    plot_trials_metric_dist(study)
-    plt.savefig('{}/{}-trials_metric_dist.png'.format(path, study.study_name))
-
-    X, y = FifaDataset.load_train_features_target()
-
-    accs = get_accuracy_dist(study, seeds_count, folds, X, y)
-    print(accs)
-
-    plot_hist(
-        lambda: accs,
-        bins_fn = local_bin(),
-        xlabel  = 'Accuracy'
-    )
-    plt.savefig('{}/{}-acc_dist.png'.format(path, study.study_name))
-
 def cv_strategy(k_fold):
-    return ParallelKFoldCVStrategy(processes=k_fold) if 'cpu' == get_device_name() else NonParallelKFoldCVStrategy()
+    return ParallelKFoldCVStrategy(processes=k_fold) if  get_device_name() == 'cpu' else NonParallelKFoldCVStrategy()
 
 def get_accuracy_dist(study, seeds_count, folds, X, y):
     seeds             = random.sample(range(1,1000), seeds_count)
@@ -124,7 +67,7 @@ def get_accuracy_dist(study, seeds_count, folds, X, y):
             strategy = cv_strategy(folds)
         )
         accs.append(cv.train(X, y, params = dict_join({ 'seed': seed, 'hidden_layers': 1 }, best_hyper_params)))
-    
+
     return accs
 # -----------------------------------------------------------------------------
 #
@@ -166,11 +109,23 @@ def main(device, study, db_url, report_path, seeds_count, folds):
     initialize_logger()
     set_device_name(device)
     set_device_memory(device)
-
+    create_dir(report_path)
+ 
     study = optuna.load_study(storage = db_url, study_name = study)
     optimizer_sumary(study)
 
-    generate_plots(study, report_path, seeds_count, folds)
+    save_optimization_history_plot(study, report_path)
+    save_parallel_coordinate_plot(study, report_path)
+    save_param_importances_plot(study, report_path)
+    save_slice_plot(study, report_path)
+    save_contour_plot(study, report_path)
+    save_edf_plot(study, report_path)
+    save_trials_metric_dist_post(study, report_path)
+
+    X, y = FifaDataset.load_train_features_target()
+    accs = get_accuracy_dist(study, seeds_count, folds, X, y)
+    print(accs)
+    save_accurary_plot(accs, report_path)
 
 if __name__ == '__main__':
     main()
