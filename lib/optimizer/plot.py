@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from plot import plot_hist, \
                  local_bin
 
-def save_accurary_plot(study, path):
+def save_accurary_plot(study, accs, path):
     plot_hist(
         lambda: accs,
         bins_fn = local_bin(),

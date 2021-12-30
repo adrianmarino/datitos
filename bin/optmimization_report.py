@@ -126,7 +126,7 @@ def main(device, study, db_url, report_path, seeds_count, folds):
     accs = get_accuracy_dist(study, seeds_count, folds, X, y)
 
     print(accs)
-    save_accurary_plot(accs, report_path)
+    save_accurary_plot(study, accs, report_path)
 
 if __name__ == '__main__':
     main()
