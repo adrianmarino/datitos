@@ -3,12 +3,12 @@ import random
 
 from sklearn.metrics import balanced_accuracy_score
 
-from callbacks import Logger, \
+from callbacks import CallbackSet, \
+                      Logger, \
                       ReduceLROnPlateau, \
                       TrainValLossComputer, \
                       TrainValAccuracyComputer
 
-from callbacks import CallbackSet
 from metrics   import show_summary
 from data      import to_single_col_df
 

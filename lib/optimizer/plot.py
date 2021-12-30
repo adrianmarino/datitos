@@ -4,7 +4,7 @@ from optuna.visualization import plot_contour, \
                                  plot_parallel_coordinate, \
                                  plot_param_importances, \
                                  plot_slice
-from plot import plot_trials_metric_dist
+from optimizer import plot_trials_metric_dist
 import matplotlib.pyplot as plt
 from plot import plot_hist, \
                  local_bin

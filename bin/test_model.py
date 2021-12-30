@@ -8,6 +8,7 @@ import warnings
 sys.path.append('./lib')
 warnings.filterwarnings("ignore")
 
+import logging
 import click
 from datetime import datetime
 from logger import initialize_logger
@@ -17,8 +18,15 @@ import optuna
 import torch
 from data         import to_single_col_df
 
+from optimizer import optimizer_sumary
+                      
 from fifa.dataset import FifaDataset
 from fifa.model   import FifaModel1
+
+from callbacks    import CallbackSet, \
+                         Logger, \
+                         TrainValLossComputer, \
+                         TrainValAccuracyComputer
 
 from device_utils import set_device_name, \
                          get_device, \
@@ -41,7 +49,7 @@ def train_model(X, y, params):
         [X.shape[1]] + \
         [params['hidden_units'] for _ in range(params['hidden_layers'])] + \
         [y.shape[1]]
-    
+
     model = FifaModel1(
         units_per_layer = units_per_layer,
         lr              = params['lr'],
@@ -54,7 +62,12 @@ def train_model(X, y, params):
         train_set    = (X, y), 
         val_set      = None, 
         batch_size   = params['batch_size'],
-        epochs       = params['epochs']
+        epochs       = params['epochs'],
+        callback_set = CallbackSet([
+            TrainValLossComputer(),
+            TrainValAccuracyComputer(),
+            Logger(metrics=['epoch', 'train_acc'])
+        ])
     )
 
     return model
@@ -67,8 +80,9 @@ def save_result(result_path, study, y_pred, dataset):
     })
 
     create_dir(result_path)
-    filename = '/{}-predict-{:%Y-%m-%d_%H-%M-%S}.csv'.format(result_path, study.study_name, datetime.now())
+    filename = '{}/{}-predict-{:%Y-%m-%d_%H-%M-%S}.csv'.format(result_path, study.study_name, datetime.now())
     test_data.to_csv(filename, index=False)
+    logging.info('{} file saved!'.format(filename))
 # -----------------------------------------------------------------------------
 #
 #
@@ -112,6 +126,10 @@ def main(device, study, db_url, result_path, cuda_process_memory_fraction):
 
     hyper_params = dict_join(study.best_trial.params, {'hidden_layers': 1})
 
+    logging.info('Best hyper parameters:')
+    optimizer_sumary(study)
+
+    logging.info('Begin training...')
     model = train_model(X, y, params = hyper_params)
 
     y_pred = to_single_col_df(model.predict(dataset.test_features()))

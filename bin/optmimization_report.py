@@ -124,6 +124,7 @@ def main(device, study, db_url, report_path, seeds_count, folds):
 
     X, y = FifaDataset.load_train_features_target()
     accs = get_accuracy_dist(study, seeds_count, folds, X, y)
+
     print(accs)
     save_accurary_plot(accs, report_path)
 
