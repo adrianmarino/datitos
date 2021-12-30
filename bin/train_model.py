@@ -57,7 +57,7 @@ def objetive(trial, k_fold, X, y):
         params = {
             'hidden_layers': 1,
             'hidden_units':   trial.suggest_int  ('hidden_units',   10,   500,   step = 10  ),
-            'lr':             trial.suggest_float('lr',             1e-7, 1e-1),
+            'lr':             trial.suggest_float('lr',             1e-7, 1e-1,  log=True),
             'momentum':       trial.suggest_float('momentum',       0.01, 0.9,   step = 0.01),
             'dropout':        trial.suggest_float('dropout',        0.0,  0.4,   step = 0.01),
             'batch_size':     trial.suggest_int  ('batch_size',     256,  512,   step = 32  ),
