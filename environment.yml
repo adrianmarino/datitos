@@ -24,6 +24,7 @@ dependencies:
   - seaborn
   - six
   - tqdm
+  - lightgbm
   - pip:
     - optuna-dashboard
     - click

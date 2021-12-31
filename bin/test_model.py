@@ -75,7 +75,7 @@ def train_model(X, y, params):
 def save_result(result_path, study, y_pred, dataset):
     mapping = ['DEF', 'FWD', 'GK', 'MID']
     test_data = pd.DataFrame(data={
-        'ID': dataset.test_set().ID.values,
+        'ID': dataset.raw_test_set().ID.values,
         'Category': [mapping[x] for x in y_pred.values.reshape((-1, ))]
     })
 

@@ -55,6 +55,15 @@ class FifaDataset:
     def train_set(self):
         return self.__train_set[self.__feature_columns() + [self.TARGET]]
 
+    def raw_train_features_target(self):
+        features = self.train_set()[self.__feature_columns()]
+        target   = self.train_set()[self.TARGET]
+
+        for col in self.CAL_COLS:
+            features[col] = features[col].astype('category')
+
+        return features, target
+
     def train_features_target(self):
         return self.__preprocess(self.train_set().dropna())
 
@@ -63,8 +72,16 @@ class FifaDataset:
         return features
 
     def test_set(self):
+        features = self.__test_set[self.__feature_columns()]
+
+        for col in self.CAL_COLS:
+            features[col] = features[col].astype('category')
+
+        return features
+
+    def raw_test_set(self):
         return self.__test_set
-        
+
     def __preprocess(self, df):
         features = df[self.__feature_columns()]
 
