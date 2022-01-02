@@ -111,12 +111,12 @@ def plot_hist(
 
     labels = [
         'Density', 
-        'Mean {}'.format(round(np.mean(values), decimals)),
-        'Median {}'.format(round(np.median(values), decimals))
+        'Mean {}'.format(np.round(np.mean(values), decimals)),
+        'Median {}'.format(np.round(np.median(values), decimals))
     ]
     
     for (mode, count) in zip(mode_results.mode, mode_results.count): 
-        labels.append('Mode {} ({})'.format(round(mode, decimals), count))
+        labels.append('Mode {} ({})'.format(np.round(mode, decimals), count))
 
     ax_hist.legend(
         loc='lower center', 

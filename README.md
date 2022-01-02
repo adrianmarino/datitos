@@ -1,11 +1,16 @@
 # Datitos
 
+[Datitos: Aprendizaje profundo](https://datitos.github.io/curso-aprendizaje-profundo/)
+
 ## TP2
+
+[T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2)
 
 ### Notebooks
 
-* [Notebook: Simple Model](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2.ipynb)
-* [Notebook: Model + Cross Validation + Hyper params optimizaiton](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-optimization.ipynb)
+* [MLP Model](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-1-mlp.ipynb)
+* [MLP Model + Cross Validation + Hyper params optimizaiton](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-2-mlp-cv-hp-opt.ipynb)
+* [LightGBM Model](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-3-lightgbm.ipynb)
 
 #### Parallel Training
 

@@ -29,3 +29,5 @@ dependencies:
     - optuna-dashboard
     - click
     - imbalanced-learn
+    - jupyterlab_tabnine
+    - jupyterlab_execute_time
