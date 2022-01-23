@@ -31,6 +31,14 @@ To automate complete train process(training, reports generation, kaggle file) al
 
 You can run a training into N workers. Each worker can be seen as a trial executor job. Each job train a model with a set of specific hyper params. All hyperparams -score pairs are stored into a maridb db. Finally you can load optuna study to get best hyperparams with hiest score. You can run a worker as next:
 
+**Notes**
+
+* Each trainig process is a `train_model.py` execution.
+* Optimization report step run `bin/optmimization_report.py` script.
+* Test model step run `bin/test_model.py` script.
+* See below to undestant how do each script. 
+
+
 **GPU**
 
 ```bash
