@@ -99,6 +99,45 @@ Options:
 
 ### Optimization report
 
+Generate next plots for specified optuna study:
+
+
+#### Validation accuracy distribution
+
+![image](report/study16-acc_dist.png)
+
+#### Optimizartion Contour diagram
+
+![image](report/study16-contour.png)
+
+#### Optimizartion EDF
+
+![image](report/study16-edf.png)
+
+#### Optimizartion history
+
+![image](report/study16-optimization_history.png)
+
+#### Optimizartion Paralel coordinates
+
+![image](report/study16-parallel_coordinate.png)
+
+#### Feature importance
+
+![image](report/study16-param_importances.png)
+
+#### Slice
+
+![image](report/study16-slice.png)
+
+#### Accurary districion of all optimization trials
+
+![image](report/study16-trials_metric_dist.png)
+
+
+#### Command
+
+
 ```bash
 $ conda activate datitos
 $ python bin/optmimization_report.py \
