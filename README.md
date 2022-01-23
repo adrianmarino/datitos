@@ -6,6 +6,8 @@
 
 * miniconda / anaconda
 * MariaDB/MySQL
+* [Airflow](https://airflow.apache.org/): See [airflow-systemd](https://github.com/adrianmarino/airflow-systemd) to install config Airflow as systemd daemon.
+* [https://pypi.org/project/optuna-dashboard/]: See [optuna-dashboard-systemd](https://github.com/adrianmarino/optuna-dashboard-systemd) to install config Optuna dashbord as systemd daemon.
 
 ## TP2
 
