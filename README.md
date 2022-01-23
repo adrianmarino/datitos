@@ -39,7 +39,7 @@ You can run a training into N workers. Each worker can be seen as a trial execut
 
 **Notes**
 
-* Each trainig process is a `train_model.py` execution.
+* Each trainig process is a `bin/train_model.py` execution.
 * Optimization report step run `bin/optmimization_report.py` script.
 * Test model step run `bin/test_model.py` script.
 * See below to undestant how do each script. 
