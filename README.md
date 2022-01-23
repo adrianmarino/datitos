@@ -106,8 +106,7 @@ Options:
 
 ### Optimization report
 
-Generate plots for specified an optuna study:
-
+Generate plots for an specified optuna study. Next you can see generated plots for study16 (Best accuracy):
 
 #### Validation accuracy distribution
 
