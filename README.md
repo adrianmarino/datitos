@@ -124,7 +124,7 @@ Generate plots for an specified optuna study. Next you can see generated plots f
 
 ![image](report/study16-optimization_history.png)
 
-#### Optimizartion paralel coordinates
+#### Optimizartion parallel coordinates
 
 ![image](report/study16-parallel_coordinate.png)
 
