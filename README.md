@@ -19,6 +19,14 @@
 * **File**: study16-predict-2022-01-23_07-44-35.csv
 
 
+
+#### Training Workflow
+
+To automaite comple training, test, report process already existe a Airflow Dag. it runs N parallel training processes and then run reports generation and kagle result selecicon a generation steps.
+
+![image](images/dag.png)
+
+
 #### Parallel Training
 
 You can run a training into N workers. Each worker can be seen as a trial executor job. Each job train a model with a set of specific hyper params. All hyperparams -score pairs are stored into a maridb db. Finally you can load optuna study to get best hyperparams with hiest score. You can run a worker as next:
