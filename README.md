@@ -5,7 +5,7 @@
 ## Requeriments
 
 * **miniconda** / **anaconda**
-* **MariaDB**/**MySQL**
+* **MariaDB** / **MySQL**
 * **Apache Airflow**: See [airflow-systemd](https://github.com/adrianmarino/airflow-systemd) to install Apache Airflow as systemd daemon.
 * **Optuna Dashboard**: See [optuna-dashboard-systemd](https://github.com/adrianmarino/optuna-dashboard-systemd) to install Optuna Dashbord as systemd daemon.
 
