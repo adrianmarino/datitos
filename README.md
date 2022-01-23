@@ -45,7 +45,7 @@ To automate complete train process(training, reports generation, kaggle file) al
 * `train_cuda_process_memory_fraction`:	0.1
 * `train_device`:	gpu / cpu
 * `train_folds`:	5
-* `train_optuna_db_url`:	mysql://root:1234@localhost/example	(Database uses by optuna to persist study state).
+* `train_optuna_db_url`:	mysql://root:1234@localhost/example	(Database used by optuna to persist study state).
 * `train_optuna_study`: study16	(Optuna study name).
 * `train_optuna_timeout`: 8000	(Maximum time to wait for hyper parameters optimization).
 * `train_optuna_trials`:	300
