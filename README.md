@@ -28,10 +28,13 @@
 
 ### Training Workflow
 
-To automate complete train process(training, reports generation, kaggle file) already exist an [Airflow](https://airflow.apache.org/) [Dag](https://github.com/adrianmarino/datitos/blob/master/dags/fifa_dag.py). An airflow dag is a data workflow that runs N parallel training processes and then run reports generation and kaggle result generation steps.
+To automate complete train process(training, reports generation, kaggle file) already exist an [Apache Airflow](https://airflow.apache.org/) Dag. An airflow dag is a data workflow that runs N parallel training processes and then run reports generation and kaggle result generation steps.
+
+**Dag**
 
 ![image](images/dag.png)
 
+[Dag Script](https://github.com/adrianmarino/datitos/blob/master/dags/fifa_dag.py) 
 
 ### Parallel Training
 
