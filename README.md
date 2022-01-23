@@ -2,6 +2,11 @@
 
 [Datitos: Aprendizaje profundo](https://datitos.github.io/curso-aprendizaje-profundo/)
 
+## Requeriments
+
+* miniconda / anaconda
+* MariaDB/MySQL
+
 ## TP2
 
 [T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2)
