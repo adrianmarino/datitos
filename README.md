@@ -12,6 +12,13 @@
 * [MLP Model + Cross Validation + Hyper params optimizaiton](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-2-mlp-cv-hp-opt.ipynb)
 * [LightGBM Model](https://github.com/adrianmarino/datitos/blob/master/tp2/tp2-3-lightgbm.ipynb)
 
+### Best results
+
+* File: study16-predict-2022-01-23_07-44-35.csv
+* Private Score: 0.89456
+* Public Score: 0.90581
+
+
 #### Parallel Training
 
 You can run a training into N workers. Each worker can be seen as a trial executor job. Each job train a model with a set of specific hyper params. All hyperparams -score pairs are stored into a maridb db. Finally you can load optuna study to get best hyperparams with hiest score. You can run a worker as next:
