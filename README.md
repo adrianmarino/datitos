@@ -14,8 +14,8 @@
 
 ### Best results
 
-* **Public Score**: 0.90581
-* **Private Score**: **0.89456**
+* **Public Score**: **0.90581**
+* **Private Score**: 0.89456
 * **File**: study16-predict-2022-01-23_07-44-35.csv
 
 
