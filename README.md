@@ -37,7 +37,7 @@ To automate complete train process(training, reports generation, kaggle file) al
 [Dag Script](https://github.com/adrianmarino/datitos/blob/master/dags/fifa_dag.py) 
 
 
-Required airflow global variables:
+**Required airflow global variables**
 
 * **project_path**:	/path/to/datitos/project
 * **report_folds**:	10
