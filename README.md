@@ -48,7 +48,7 @@ To automate complete train process(training, reports generation, kaggle file) al
 * **train_optuna_db_url**:	mysql://root:1234@localhost/example	(Database uses by optuna to persist study state)
 * **train_optuna_study**: study16	(Optuna study name).
 * **train_optuna_timeout**: 8000	(Maximum time to wait for hyper parameters optimization).
-* vtrain_optuna_trials**:	300
+* **train_optuna_trials**:	300
 * **train_workers_count**: 4
 
 ### Parallel Training
