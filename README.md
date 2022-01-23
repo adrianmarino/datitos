@@ -106,7 +106,7 @@ Options:
 
 ### Optimization report
 
-Generate next plots for specified optuna study:
+Generate plots for specified an optuna study:
 
 
 #### Validation accuracy distribution
