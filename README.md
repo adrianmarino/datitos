@@ -118,7 +118,7 @@ Generate next plots for specified optuna study:
 
 ![image](report/study16-optimization_history.png)
 
-#### Optimizartion Paralel coordinates
+#### Optimizartion paralel coordinates
 
 ![image](report/study16-parallel_coordinate.png)
 
@@ -130,7 +130,7 @@ Generate next plots for specified optuna study:
 
 ![image](report/study16-slice.png)
 
-#### Accurary districion of all optimization trials
+#### Optimization trials accurary distribution 
 
 ![image](report/study16-trials_metric_dist.png)
 
