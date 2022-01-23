@@ -19,15 +19,14 @@
 * **File**: study16-predict-2022-01-23_07-44-35.csv
 
 
-
-#### Training Workflow
+### Training Workflow
 
 To automate complete train process(training, reports generation, kaggle file) already exist an [Airflow](https://airflow.apache.org/) [Dag](https://github.com/adrianmarino/datitos/blob/master/dags/fifa_dag.py). An airflow dag is a data workflow that runs N parallel training processes and then run reports generation and kaggle result generation steps.
 
 ![image](images/dag.png)
 
 
-#### Parallel Training
+### Parallel Training
 
 You can run a training into N workers. Each worker can be seen as a trial executor job. Each job train a model with a set of specific hyper params. All hyperparams -score pairs are stored into a maridb db. Finally you can load optuna study to get best hyperparams with hiest score. You can run a worker as next:
 
@@ -129,7 +128,7 @@ Options:
   --help                 Show this message and exit.
   ```
 
-#### Test model
+### Test model
 
 ```bash
 $ conda activate datitos
