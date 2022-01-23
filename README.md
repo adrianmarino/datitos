@@ -169,6 +169,8 @@ Options:
 
 ### Test model
 
+It script runs N model training instances using hyperparameters of optimization trial with best accurary. Then gets model with highest accuracy and predict under kaggle test file. Finally genera kaggle file to upload. 
+
 ```bash
 $ conda activate datitos
 $ python  bin/test_model.py \
