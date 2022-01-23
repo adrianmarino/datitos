@@ -39,7 +39,7 @@ from optuna.pruners import HyperbandPruner
 # Functions
 # -----------------------------------------------------------------------------
 def cv_strategy(k_fold):
-    if 'cpu' == get_device_name(): 
+    if 'cpu' == get_device_name():
         return ParallelKFoldCVStrategy(processes=k_fold)
     return NonParallelKFoldCVStrategy()
 

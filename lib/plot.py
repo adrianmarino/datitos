@@ -18,7 +18,7 @@ def plot_metrics(logs, warmup_count = 0):
                 y=logs[name][warmup_count:], 
                 label=name.capitalize()
             )
-    plt.xlabel("Epocs")
+    plt.xlabel("EpFocs")
     plt.title("Metrics")
     plt.tight_layout()
     plt.show()

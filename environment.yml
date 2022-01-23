@@ -6,7 +6,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9.7
   - pylint
   - python-kaleido
   - jupyterlab
@@ -20,6 +19,7 @@ dependencies:
   - plotly
   - pytorch
   - scikit-learn
+  - scikit-plot
   - scipy
   - seaborn
   - six
@@ -31,3 +31,5 @@ dependencies:
     - imbalanced-learn
     - jupyterlab_tabnine
     - jupyterlab_execute_time
+    - mxnet
+    - d2l

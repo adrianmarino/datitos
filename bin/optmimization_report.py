@@ -82,7 +82,7 @@ def get_accuracy_dist(study, seeds_count, folds, X, y):
 @click.option(
     '--device',
     default='cpu', 
-    help='Device used to train and optimize model. Values: gpu, cpu.'
+    help='Device used to train and optimize model. Values: gpu or cpu(default).'
 )
 @click.option('--study',  default='my-studio-10', help='The study name.')
 @click.option(
