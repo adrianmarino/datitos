@@ -1,39 +1,40 @@
 from datetime import timedelta
+
 from airflow import DAG
-from airflow.utils.dates import days_ago
 from airflow.models import Variable
-from airflow.models.baseoperator import chain
+from airflow.utils.dates import days_ago
+
 from dag_utils import BashTaskBuilder
 from slack_utils import task_fail_slack_alert
 
 with DAG(
-    'FIFA',
-    default_args = {
-        'owner': 'adrian',
-        'depends_on_past':  False,
-        'email': ['adrianmarino@gmail.com'],
-        'on_failure_callback': task_fail_slack_alert,
-        'retries': 5,
-        'retry_delay': timedelta(seconds=10),
-        'max_active_runs': 1 
-    },
-    description       = 'Fifa: Train model and generate test result',
-    schedule_interval = '0 0 */1 * *',
-    start_date        = days_ago(0),
-    catchup           = False,
-    tags              = ['fifa']
+        'FIFA',
+        default_args={
+            'owner': 'adrian',
+            'depends_on_past': False,
+            'email': ['adrianmarino@gmail.com'],
+            'on_failure_callback': task_fail_slack_alert,
+            'retries': 5,
+            'retry_delay': timedelta(seconds=10),
+            'max_active_runs': 1
+        },
+        description='Fifa: Train model and generate test result',
+        schedule_interval='0 0 */1 * *',
+        start_date=days_ago(0),
+        catchup=False,
+        tags=['fifa']
 ) as dag:
     def create_train_tasks(worker_id):
         return BashTaskBuilder('train_model_worker_{}'.format(worker_id)) \
             .var_fields({
-                'Device'  : 'train_device',
-                'Cuda mem': 'train_cuda_process_memory_fraction',
-                'Folds'   : 'train_folds',
-                'Study'   : 'train_optuna_study',
-                'Trials'  : 'train_optuna_trials',
-                'DB URL'  : 'train_optuna_db_url',
-                'Timeout' : 'train_optuna_timeout'
-            }) \
+            'Device': 'train_device',
+            'Cuda mem': 'train_cuda_process_memory_fraction',
+            'Folds': 'train_folds',
+            'Study': 'train_optuna_study',
+            'Trials': 'train_optuna_trials',
+            'DB URL': 'train_optuna_db_url',
+            'Timeout': 'train_optuna_timeout'
+        }) \
             .script("""
             python bin/train_model.py \
                 --device {{ var.value.train_device }} \
@@ -46,15 +47,16 @@ with DAG(
             """) \
             .build()
 
+
     def create_optimization_report_task():
         return BashTaskBuilder('optimization_report') \
             .var_fields({
-                'Device'      : 'train_device',
-                'Study'       : 'train_optuna_study',
-                'DB URL'      : 'train_optuna_db_url',
-                'Seeds Count' : 'report_seeds_count',
-                'Folds'       : 'report_folds'
-            }) \
+            'Device': 'train_device',
+            'Study': 'train_optuna_study',
+            'DB URL': 'train_optuna_db_url',
+            'Seeds Count': 'report_seeds_count',
+            'Folds': 'report_folds'
+        }) \
             .script("""
             python bin/optmimization_report.py \
                 --device {{ var.value.train_device }} \
@@ -66,13 +68,14 @@ with DAG(
             """) \
             .build()
 
+
     def create_test_task():
         return BashTaskBuilder('test_model') \
             .var_fields({
-                'Device'       : 'train_device',
-                'Study'        : 'train_optuna_study',
-                'DB URL'       : 'train_optuna_db_url'
-            }) \
+            'Device': 'train_device',
+            'Study': 'train_optuna_study',
+            'DB URL': 'train_optuna_db_url'
+        }) \
             .script("""
             python bin/test_model.py \
                 --study {{ var.value.train_optuna_study }} \
@@ -81,12 +84,13 @@ with DAG(
             """) \
             .build()
 
+
     # Create all tasks...
     workers_count = int(Variable.get('train_workers_count'))
 
-    train_workers       = [create_train_tasks(id) for id in range(1, workers_count+1)]
+    train_workers = [create_train_tasks(id) for id in range(1, workers_count + 1)]
     optimization_report = create_optimization_report_task()
-    test_model          = create_test_task()
+    test_model = create_test_task()
 
     # Workflow...
     train_workers >> optimization_report >> test_model

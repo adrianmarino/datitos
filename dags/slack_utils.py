@@ -3,6 +3,7 @@ from airflow.contrib.operators.slack_webhook_operator import SlackWebhookOperato
 
 SLACK_CONN_ID = 'slack'
 
+
 def task_fail_slack_alert(context):
     slack_webhook_token = BaseHook.get_connection(SLACK_CONN_ID).password
     
@@ -25,7 +26,7 @@ def task_fail_slack_alert(context):
         http_conn_id=SLACK_CONN_ID,
         webhook_token=slack_webhook_token,
         message=slack_msg,
-        username='airflow'
+        username='util'
     )
 
     return alert.execute(context=context)

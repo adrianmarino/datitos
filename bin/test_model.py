@@ -15,7 +15,6 @@ from logger import initialize_logger
 import numpy as np
 import pandas as pd
 import optuna
-import torch
 from data         import to_single_col_df
 
 from optimizer import optimizer_sumary

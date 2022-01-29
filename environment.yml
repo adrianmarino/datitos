@@ -25,11 +25,11 @@ dependencies:
   - six
   - tqdm
   - lightgbm
+  - util
   - pip:
     - optuna-dashboard
     - click
     - imbalanced-learn
     - jupyterlab_tabnine
     - jupyterlab_execute_time
-    - mxnet
-    - d2l
+    - bunch
