@@ -1,6 +1,7 @@
 # Datitos
 
-[Datitos: Aprendizaje profundo](https://datitos.github.io/curso-aprendizaje-profundo/)
+* [Datitos: Aprendizaje profundo](https://datitos.github.io/curso-aprendizaje-profundo/)
+* [T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2): Can you predict what position a soccer player plays based on the stats that the FIFA 19 game keeps on him?
 
 ## Requeriments
 
@@ -8,10 +9,6 @@
 * **MariaDB** / **MySQL**
 * **Apache Airflow**: See [airflow-systemd](https://github.com/adrianmarino/airflow-systemd) to install Apache Airflow as systemd daemon.
 * **Optuna Dashboard**: See [optuna-dashboard-systemd](https://github.com/adrianmarino/optuna-dashboard-systemd) to install Optuna Dashbord as systemd daemon.
-
-## TP2
-
-[T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2): Can you predict what position a soccer player plays based on the stats that the FIFA 19 game keeps on him?
 
 ### Notebooks
 
