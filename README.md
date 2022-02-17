@@ -11,7 +11,7 @@
 
 ## TP2
 
-[T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2)
+[T.P. N°2 - Aprendizaje Profundo 2021 by Datitos](https://www.kaggle.com/c/tp-n2-aprendizaje-profundo-2021-by-datitos-v2): Can you predict what position a soccer player plays based on the stats that the FIFA 19 game keeps on him?
 
 ### Notebooks
 
